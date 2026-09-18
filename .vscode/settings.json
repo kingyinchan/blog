@@ -1,0 +1,36 @@
+{
+  // MDX 默认被当成纯文本，指定语言后才有语法高亮和 JSX 提示。
+  "files.associations": { "*.mdx": "mdx" },
+
+  // 写文章时按窗口宽度软换行，不要在源码里硬敲换行 ——
+  // Markdown 的单个换行不产生 <br>，硬换行只会让 diff 变难读。
+  "[mdx]": {
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": { "other": true, "strings": true }
+  },
+  "[markdown]": { "editor.wordWrap": "on" },
+
+  // 让 Tailwind 智能提示在 mdx 里也生效（正文里嵌组件时用得上）。
+  "tailwindCSS.includeLanguages": { "mdx": "html" },
+
+  // markdown-all-in-one 的表格自动对齐等功能默认只认 markdown。
+  "markdown.extension.list.indentationSize": "adaptive",
+
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+
+  // 拼写检查忽略这些项目里高频出现的词。
+  "cSpell.words": [
+    "giscus",
+    "pagefind",
+    "katex",
+    "shiki",
+    "rehype",
+    "remark",
+    "frontmatter",
+    "kingyinchan",
+    "nojekyll",
+    "autolink",
+    "slugger"
+  ]
+}
