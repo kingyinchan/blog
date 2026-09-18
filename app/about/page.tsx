@@ -11,8 +11,7 @@ export default function AboutPage() {
     >
       <h1>关于</h1>
       <p>
-        这里是 {blog.author} 的技术博客。把这段文字换成你自己的介绍：你在做什么、
-        擅长什么、这个博客打算写什么。
+        Learning notes, thought, programe...
       </p>
       <h2>联系</h2>
       <ul>
