@@ -1,0 +1,67 @@
+---
+title: "第一篇：这个博客是怎么搭起来的"
+date: 2026-09-18
+description: "Next.js 静态导出 + GitHub Pages 的一套最小可用博客，顺便当作排版测试页。"
+tags: ["Next.js", "工程化"]
+draft: false
+---
+
+这篇既是开张公告，也是排版测试页 —— 把常用的 Markdown 元素都过一遍，
+确认代码高亮、公式、表格在明暗两套主题下都正常。
+
+## 写作流程
+
+新建文章：
+
+```bash
+npm run new "文章标题" my-post-slug
+```
+
+它会在 `content/posts/` 下生成一个带 frontmatter 的 `.mdx`，默认 `draft: true`。
+草稿只在 `npm run dev` 下可见，构建时会被过滤掉，所以可以放心把半成品推上去。
+
+## 代码高亮
+
+围栏代码块支持标题、行号和高亮行：
+
+```ts title="lib/retry.ts" showLineNumbers {6-8}
+export async function retry<T>(fn: () => Promise<T>, times = 3): Promise<T> {
+  let lastError: unknown;
+  for (let i = 0; i < times; i++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      await new Promise((r) => setTimeout(r, 2 ** i * 100));
+    }
+  }
+  throw lastError;
+}
+```
+
+行内代码写成 `const x = 1` 这样。
+
+## 数学公式
+
+行内公式 $O(n \log n)$，独立公式：
+
+$$
+T(n) = 2T\left(\frac{n}{2}\right) + O(n) = O(n \log n)
+$$
+
+## 表格与引用
+
+| 方案 | 构建速度 | 上手成本 |
+| --- | --- | --- |
+| Next.js | 中 | 中 |
+| Hugo | 快 | 中 |
+| Astro | 快 | 低 |
+
+> 选型不重要，能持续写下去才重要。
+
+## 待办
+
+- [x] 搭好工程
+- [x] 配好高亮和公式
+- [ ] 填 giscus 配置
+- [ ] 写第二篇
