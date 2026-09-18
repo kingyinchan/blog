@@ -11,7 +11,7 @@ export default function AboutPage() {
     >
       <h1>关于</h1>
       <p>
-        Learning notes, thought, programe...
+        Learning notes, thought, program...
       </p>
       <h2>联系</h2>
       <ul>
