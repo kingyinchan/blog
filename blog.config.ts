@@ -28,10 +28,10 @@ export const blog = {
    * 留空则文章页不渲染评论区。
    */
   giscus: {
-    repo: "" as `${string}/${string}` | "",
-    repoId: "",
+    repo: "kingyinchan/blog",
+    repoId: "R_kgDOUfkrEg",
     category: "Announcements",
-    categoryId: "",
+    categoryId: "DIC_kwDOUfkrEs4DF2eP",
   },
 } as const;
 
