@@ -47,7 +47,12 @@ export function getAllPosts(): Post[] {
     .filter((f) => /\.mdx?$/.test(f))
     .map(parseFile)
     .filter((p) => !p.draft || process.env.NODE_ENV === "development")
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+    // 日期倒序；同一天的按 slug 升序，保证系列文章（01、02…）顺序稳定。
+    // 比较器对相等必须返回 0 —— 旧写法恒返回 ±1，是个不一致比较器，
+    // 同日期文章的排序结果由 V8 内部实现决定，不可预测。
+    .sort(
+      (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
+    );
 }
 
 export function getPost(slug: string): Post | undefined {
