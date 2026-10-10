@@ -6,6 +6,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode, { type Options as PrettyCodeOptions } from "rehype-pretty-code";
 import type { MDXComponents } from "mdx/types";
+import { blog } from "@/blog.config";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,6 +17,9 @@ const prettyCodeOptions: PrettyCodeOptions = {
   keepBackground: false,
   defaultLang: { block: "text", inline: "text" },
 };
+
+const imageClass =
+  "h-auto w-full rounded-lg border border-neutral-200 dark:border-neutral-800";
 
 /** 文章正文里可用的组件。想在 MDX 里用自定义组件，加到这里即可。 */
 const components: MDXComponents = {
@@ -34,16 +38,31 @@ const components: MDXComponents = {
       </Link>
     );
   },
-  // 静态导出下 next/image 不做优化，但仍能拿到懒加载和尺寸占位。
-  img: ({ src = "", alt = "" }) => (
-    <Image
-      src={src as string}
-      alt={alt}
-      width={1600}
-      height={900}
-      className="h-auto w-full rounded-lg border border-neutral-200 dark:border-neutral-800"
-    />
-  ),
+  img: ({ src = "", alt = "" }) => {
+    const raw = String(src);
+
+    // 外链图片直接用原生 img：next/image 要求远程地址在 images.remotePatterns
+    // 里登记，不登记会在构建时直接报错。
+    if (/^https?:\/\//.test(raw)) {
+      // 这里用原生 img 是有意的，不走 next/image —— 见上面注释。
+      // eslint-disable-next-line @next/next/no-img-element
+      return <img src={raw} alt={alt} className={imageClass} />;
+    }
+
+    // 关键：unoptimized 模式下 next/image 原样输出 src，不会补 basePath
+    // （站内 Link 会补，图片不会）。部署在 /blog 子路径时不补就是 404。
+    const src2 = raw.startsWith("/") ? `${blog.basePath}${raw}` : raw;
+
+    return (
+      <Image
+        src={src2}
+        alt={alt}
+        width={1600}
+        height={900}
+        className={imageClass}
+      />
+    );
+  },
 };
 
 export async function renderMdx(source: string) {
